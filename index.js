@@ -1,5 +1,29 @@
+const chromium = require('chrome-aws-lambda');
+
 exports.handler = async function http(req) {
 
+  let result = null;
+  let browser = null;
+
+  
+    browser = await chromium.puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+      ignoreHTTPSErrors: true,
+    });
+
+    let page = await browser.newPage();
+
+    await page.goto('https:covid19.ca.gov');
+
+    result = await page.title();
+  
+    if (browser !== null) {
+      await browser.close();
+    }
+    
   let html = `
 <!doctype html>
 <html lang=en>
@@ -22,36 +46,27 @@ exports.handler = async function http(req) {
 
   </body>
 </html>`
+/*
+await page.setContent(html)
+
+// take a screenshot
+const buffer = await page.screenshot()
 
   return {
     headers: {
-      'content-type': 'text/html; charset=utf8',
+      'content-type': 'image/png',
       'cache-control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0'
     },
     statusCode: 200,
-    body: html
+    body: buffer.toString('base64')
   }
-}
-
-// Other example responses
-
-/* Forward requester to a new path
-exports.handler = async function http (req) {
-  return {
-    statusCode: 302,
-    headers: {'location': '/about'}
-  }
-}
 */
-
-/* Respond with successful resource creation, CORS enabled
-let arc = require('@architect/functions')
-exports.handler = arc.http.async (http)
-async function http (req) {
   return {
-    statusCode: 201,
-    json: { ok: true },
-    cors: true,
+    headers: {
+      'content-type': 'text/html; charset=utf-8',
+      'cache-control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0'
+    },
+    statusCode: 200,
+    body: result
   }
 }
-*/
