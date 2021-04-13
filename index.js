@@ -1,29 +1,28 @@
-const chromium = require('chrome-aws-lambda');
+// const chromium = require('chrome-aws-lambda');
 
 exports.handler = async function http(req) {
-
+/*
   let result = null;
   let browser = null;
 
-  
-    browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
-      ignoreHTTPSErrors: true,
-    });
+  browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+    ignoreHTTPSErrors: true,
+  });
 
-    let page = await browser.newPage();
+  let page = await browser.newPage();
 
-    await page.goto('https:covid19.ca.gov');
+  await page.goto('https:covid19.ca.gov');
 
-    result = await page.title();
-  
-    if (browser !== null) {
-      await browser.close();
-    }
-    
+  result = await page.title();
+
+  if (browser !== null) {
+    await browser.close();
+  }
+  */
   let html = `
 <!doctype html>
 <html lang=en>
@@ -67,6 +66,6 @@ const buffer = await page.screenshot()
       'cache-control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0'
     },
     statusCode: 200,
-    body: result
+    body: html
   }
 }
